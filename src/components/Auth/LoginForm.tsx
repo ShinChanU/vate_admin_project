@@ -9,12 +9,19 @@ export const Container = styled.div`
     width: 100%;
     margin-bottom: 10px;
     border-radius: 5px;
+    height: 40px;
   }
 
   button {
     width: 100%;
     margin-top: 10px;
     border-radius: 5px;
+    height: 50px;
+    font-size: 20px;
+    font-weight: 700;
+    background: #dbe4ff;
+    color: black;
+    border: none;
 
     :hover {
       background: black;

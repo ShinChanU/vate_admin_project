@@ -20,6 +20,7 @@ interface Store {
     password: string,
     passwordCheck: string
   ) => Promise<number>;
+  check: () => void;
   postLogout: () => void;
 }
 
@@ -83,6 +84,14 @@ export const AuthStore = create<Store>((set, get) => ({
     }
   },
 
+  // userCheck
+  check: async () => {
+    const res = await AuthAPI.userCheck();
+    if (res.data.statusCode === 200) {
+      set({ user: res.data.result.memberId });
+    }
+  },
+
   // signup post api
   postSignUp: async (
     username: string,
@@ -115,7 +124,6 @@ export const AuthStore = create<Store>((set, get) => ({
     const res = await AuthAPI.logout();
     if (res?.data.statusCode === 200) {
       set({ user: null });
-      alert("로그아웃이 완료되었습니다.");
     }
   },
 }));

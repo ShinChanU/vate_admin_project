@@ -5,6 +5,8 @@ import SystemPage from "pages/SystemPage";
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from "components/NavBar";
 import styled from "styled-components";
+import ProtectedRoute from "lib/router/ProtectedRoute";
+import { Container } from "react-bootstrap";
 
 const Layout = styled.div`
   min-height: 100vh;
@@ -14,32 +16,35 @@ const Layout = styled.div`
   align-items: center;
 `;
 
-const Container = styled.div`
+const StyleContainer = styled(Container)`
   height: 100vh;
-  max-width: 1300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const StyleContainer = styled.div`
-  /* flex: 1;
-  display: flex;
-  align-items: stretch; */
 `;
 
 function App() {
   return (
     <Layout>
-      <Container>
-        <Navbar />
+      <Navbar />
+      <StyleContainer>
         <Routes>
-          <Route path="/" element={<SystemPage />}></Route>
-          <Route path="/system/*" element={<SystemPage />}></Route>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <SystemPage />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/system/*"
+            element={
+              <ProtectedRoute>
+                <SystemPage />
+              </ProtectedRoute>
+            }
+          ></Route>
           <Route path="/auth/*" element={<AuthPage />}></Route>
         </Routes>
-      </Container>
+      </StyleContainer>
     </Layout>
   );
 }
