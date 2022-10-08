@@ -10,12 +10,17 @@ export interface StyledComProps {
 
 const Container = styled.div`
   margin-top: 100px;
+  margin-bottom: 50px;
   border-radius: 10px;
   border: rgba(50, 50, 93, 0.25) 2px solid;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
     rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  /* height: 650px; */
+  padding: 20px 40px;
+`;
+
+const Section = styled.section`
   height: 80%;
-  padding: 20px;
 `;
 
 const Ul = styled(Tabs)`
@@ -34,7 +39,7 @@ const titleSeq = [
   {
     id: 1,
     title: "봉사 등록",
-    des: "volResister",
+    des: "volRegister",
   },
 ];
 
@@ -44,7 +49,7 @@ const SystemPage = () => {
   return (
     <Container>
       <div>VATE 등록 시스템</div>
-      <section>
+      <Section>
         <Ul
           id="controlled-tab-example"
           defaultActiveKey="volStatus"
@@ -55,7 +60,7 @@ const SystemPage = () => {
           ))}
         </Ul>
         <VolSystem status={nowStatus} />
-      </section>
+      </Section>
     </Container>
   );
 };

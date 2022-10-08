@@ -1,0 +1,190 @@
+[
+  {
+    "id": "category",
+    "title": "봉사 분야",
+    "type": "radio",
+    "contents": [
+      {
+        "id": 1,
+        "kor": "주거환경",
+        "eng": "HOME_ENVIRONMENT"
+      },
+      {
+        "id": 2,
+        "kor": "생활편의지원",
+        "eng": "LIVING_SUPPORT"
+      },
+      {
+        "id": 3,
+        "kor": "상담",
+        "eng": "COUNSELING"
+      },
+      {
+        "id": 4,
+        "kor": "교육",
+        "eng": "EDUCATION"
+      },
+      {
+        "id": 5,
+        "kor": "보건의료",
+        "eng": "MEDICAL"
+      },
+      {
+        "id": 6,
+        "kor": "농어촌봉사",
+        "eng": "RURAL"
+      },
+      {
+        "id": 7,
+        "kor": "문화봉사",
+        "eng": "CULTURE"
+      },
+      {
+        "id": 8,
+        "kor": "환경보호",
+        "eng": "ENVIRONMENT"
+      },
+      {
+        "id": 9,
+        "kor": "행정보조",
+        "eng": "ADMIN_ASSIST"
+      },
+      {
+        "id": 10,
+        "kor": "안전예방",
+        "eng": "SAFETY"
+      },
+      {
+        "id": 11,
+        "kor": "공익",
+        "eng": "PUBLIC"
+      },
+      {
+        "id": 12,
+        "kor": "재해, 재난",
+        "eng": "DISASTER"
+      },
+      {
+        "id": 13,
+        "kor": "해외봉사",
+        "eng": "GLOBAL"
+      },
+      {
+        "id": 14,
+        "kor": "멘토링",
+        "eng": "MENTOR"
+      },
+      {
+        "id": 15,
+        "kor": "기타",
+        "eng": "ETC"
+      }
+    ]
+  },
+  {
+    "id": "activityMethod",
+    "title": "활동 방법",
+    "type": "select",
+    "contents": [
+      {
+        "id": 1,
+        "kor": "온라인",
+        "eng": "ONLINE"
+      },
+      {
+        "id": 2,
+        "kor": "오프라인",
+        "eng": "OFFLINE"
+      }
+    ]
+  },
+  {
+    "id": "authorizationType",
+    "title": "승인 구분",
+    "type": "select",
+    "contents": [
+      {
+        "id": 1,
+        "kor": "불필요",
+        "eng": "UNNECESSARY"
+      },
+      {
+        "id": 2,
+        "kor": "필요",
+        "eng": "NECESSARY"
+      }
+    ]
+  },
+  {
+    "id": "activityDay",
+    "title": "활동요일",
+    "type": "dynamicCheckbox",
+    "contents": [
+      {
+        "id": 1,
+        "kor": "월요일",
+        "eng": "MONDAY"
+      },
+      {
+        "id": 2,
+        "kor": "화요일",
+        "eng": "TUESDAY"
+      },
+      {
+        "id": 3,
+        "kor": "수요일",
+        "eng": "WEDNESDAY"
+      },
+      {
+        "id": 4,
+        "kor": "목요일",
+        "eng": "THURSDAY"
+      },
+      {
+        "id": 5,
+        "kor": "금요일",
+        "eng": "FRIDAY"
+      },
+      {
+        "id": 6,
+        "kor": "토요일",
+        "eng": "SATURDAY"
+      },
+      {
+        "id": 7,
+        "kor": "일요일",
+        "eng": "SUNDAY"
+      }
+    ]
+  },
+  {
+    "id": "organization",
+    "title": "활동 기관",
+    "type": "organization"
+  },
+  {
+    "id": "recruitDate",
+    "title": "모집 기간",
+    "type": "date"
+  },
+  {
+    "id": "activityDate",
+    "title": "활동 기간",
+    "type": "date"
+  },
+  {
+    "id": "activityName",
+    "title": "봉사 활동명",
+    "type": "text"
+  },
+  {
+    "id": "activitySummary",
+    "title": "주요 활동(활동 한줄설명)",
+    "type": "text"
+  },
+  {
+    "id": "activityContent",
+    "title": "봉사 상세설명",
+    "type": "textarea"
+  }
+]

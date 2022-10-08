@@ -7,7 +7,7 @@ type UserInfo = {
   passwordCheck?: string;
 };
 
-interface Store {
+interface AuthStoreProps {
   login: UserInfo;
   signUp: UserInfo;
   user: string | null;
@@ -24,7 +24,7 @@ interface Store {
   postLogout: () => void;
 }
 
-export const AuthStore = create<Store>((set, get) => ({
+export const AuthStore = create<AuthStoreProps>((set, get) => ({
   login: {},
   signUp: {},
   user: null, // 로그인 후 담을 유저아이디
