@@ -3,16 +3,22 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
 import { FormProps } from "./Radio";
+import TimeInput from "./TimeInput";
 
 const FlexBox = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-around;
 
   button {
     padding: 0px;
     width: 22px;
     line-height: 20px;
+  }
+
+  @media screen and (max-width: 1023px) {
+    display: block;
   }
 `;
 
@@ -33,11 +39,12 @@ const dayKor: any = {
 };
 
 const DynamicBox = ({ contents }: FormProps) => {
-  const { timeList, onAddActTime, onRemoveActTime } = RegisterStore();
+  const { timeList, onAddActTime, onRemoveActTime, onChangeTimeList } =
+    RegisterStore();
 
   return (
     <>
-      <FlexBox>
+      <FlexBox style={{ marginBottom: "10px", justifyContent: "start" }}>
         {contents?.map((e) => (
           <RadioElement key={e.id}>
             {e.kor}
@@ -45,15 +52,29 @@ const DynamicBox = ({ contents }: FormProps) => {
           </RadioElement>
         ))}
       </FlexBox>
-      {timeList && <>활동시간</>}
       {timeList?.map((e: any, i) => (
         <FlexBox key={i}>
-          {dayKor[e.activityWeek]}
-          <div>시간 설정</div>
           <div>
-            모집인원 <input />
+            <b>{dayKor[e.activityWeek]}</b>
           </div>
-          <Button onClick={() => onRemoveActTime(i)}>-</Button>
+          <div>
+            시작 시간
+            <TimeInput time={e.startTime} index={i} flag="start" />
+            시~종료 시간
+            <TimeInput time={e.endTime} index={i} flag="end" />시
+          </div>
+          <div>
+            모집 인원(명){" "}
+            <input
+              style={{ width: "70px" }}
+              placeholder="모집할 인원을 입력해주세요."
+              type="text"
+              value={e.numOfRecruit || 0}
+              name="numOfRecruit"
+              onChange={(e) => onChangeTimeList(i, "num", e.target.value)}
+            />
+            &nbsp;&nbsp;<Button onClick={() => onRemoveActTime(i)}>-</Button>
+          </div>
         </FlexBox>
       ))}
     </>

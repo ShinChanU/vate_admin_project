@@ -29,7 +29,6 @@ const Radio = ({ contents, onChange, id }: FormProps) => {
               value={e.eng}
               name={id}
               onChange={(e) => onChange(e.target.name, e.target.value)}
-              // checked={} zustand
             />
             {e.kor}
           </RadioElement>

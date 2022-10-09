@@ -14,6 +14,7 @@ type ActProps = {
 interface RegisterStoreProps {
   activity: null | ActProps;
   timeList: null | TimeProps[];
+  onChangeTimeList: (index: number, flag: string, value: any) => void;
   onAddActTime: (day: string) => void;
   onRemoveActTime: (idx: number) => void;
   initRegisterForm: () => void;
@@ -27,6 +28,30 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
   activity: null,
 
   timeList: null,
+
+  onChangeTimeList: (index, flag, value) => {
+    console.log(index, flag, value);
+    let tmpTimeList = get().timeList;
+    // time 데이터 수정
+    if (flag === "end" && tmpTimeList && tmpTimeList[index]) {
+      tmpTimeList[index].endTime = value;
+    } else if (flag === "start" && tmpTimeList && tmpTimeList[index]) {
+      tmpTimeList[index].startTime = value;
+      if (tmpTimeList[index].endTime) {
+        let enT = tmpTimeList[index].endTime;
+        if (value && enT && value > enT) {
+          tmpTimeList[index].endTime = value;
+        }
+      }
+    }
+    // numOfRecruit 데이터 수정
+    if (flag === "num" && tmpTimeList && tmpTimeList[index]) {
+      tmpTimeList[index].numOfRecruit = +value;
+    }
+    set({
+      timeList: tmpTimeList,
+    });
+  },
 
   onAddActTime: (day) => {
     let tmpArr = get().timeList;
@@ -56,16 +81,14 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
         activityName: null,
         activitySummary: null,
         activityContent: null,
-        activityMethod: null,
-        authorizationType: null,
+        activityMethod: null, // "" 일수도
+        authorizationType: null, // "" 일수도
         category: null,
         activityBegin: null,
         activityEnd: null,
         recruitBegin: null,
         recruitEnd: null,
         organizationId: null,
-        numOfRecruit: null,
-        // timeList: null,
       },
     });
   },

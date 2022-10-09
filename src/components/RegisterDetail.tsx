@@ -37,20 +37,10 @@ const RegisterDetail = () => {
           <StyleDiv key={id}>
             <Title>{title}</Title>
             {type === "radio" && (
-              <Radio
-                contents={data.contents}
-                onChange={onChange}
-                id={id}
-                // value={null} zustand와 연결
-              />
+              <Radio contents={data.contents} onChange={onChange} id={id} />
             )}
             {type === "select" && (
-              <Select
-                onChange={onChange}
-                // onChange, value
-                contents={data.contents}
-                id={id}
-              />
+              <Select onChange={onChange} contents={data.contents} id={id} />
             )}
             {type === "dynamicCheckbox" && (
               <DynamicBox
