@@ -1,14 +1,40 @@
-import React, { useState } from "react";
+import { getOrganization } from "lib/api/volunteerApi";
+import { OrganizationStore, OrgProps } from "lib/zustand/organization";
+import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import OrgList from "./OrgList";
 import RegisterOrgForm from "./RegisterOrgForm";
 
-const Container = styled.div`
+interface Props {
+  cnt: number;
+}
+
+const Container = styled.div<Props>`
   display: grid;
   min-height: 500px;
   border: 1px solid black;
-  grid-template-columns: 1fr 1fr;
+  transition: 1s linear all;
+  ${(props) =>
+    props.cnt === 1 &&
+    css`
+      display: flex;
+      justify-content: center;
+      > div {
+        width: 500px;
+      }
+      @media screen and (max-width: 767px) {
+        > div {
+          width: auto;
+        }
+      }
+      /* grid-template-columns: 0.5fr; */
+    `}
+  ${(props) =>
+    props.cnt === 2 &&
+    css`
+      grid-template-columns: 1fr 1fr;
+    `}
   @media screen and (max-width: 767px) {
     display: block;
   }
@@ -17,6 +43,9 @@ const Container = styled.div`
     > div {
       height: 500px;
       overflow: auto;
+      @media screen and (max-width: 1023px) {
+        height: auto;
+      }
     }
   }
 
@@ -24,7 +53,10 @@ const Container = styled.div`
     border: 1px solid rgba(50, 50, 93, 0.75);
     border-radius: 5px;
     padding: 10px;
-    margin: 5px;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+
     transition: all 0.5s linear;
     display: flex;
     flex-direction: column;
@@ -33,6 +65,7 @@ const Container = styled.div`
     > header {
       display: flex;
       justify-content: space-between;
+      margin-bottom: 5px;
 
       > span {
         width: 24px;
@@ -61,9 +94,15 @@ const OrganizationsAdminForm = ({ setPage }: any) => {
   const [listView, setListView] = useState(false);
   const [modView, setModView] = useState(false);
   const [modDataId, setModDataId] = useState(null);
+  const [cnt, setCnt] = useState(1);
 
-  // setPage("form") 으로 종료
-  // 현재 데이터 날리기
+  useEffect(() => {
+    if (listView) {
+      setCnt(2);
+    } else {
+      setCnt(1);
+    }
+  }, [listView]);
 
   const onSetListView = () => {
     setListView(!listView);
@@ -73,32 +112,26 @@ const OrganizationsAdminForm = ({ setPage }: any) => {
   };
 
   return (
-    <Container>
+    <Container cnt={cnt}>
       <SubGrid>
+        {/* 활동 기관 등록 폼 */}
         <div className="item">
           <header>
             활동 기관 등록 <span onClick={() => setPage("form")}>X</span>
           </header>
-          <RegisterOrgForm />
-          <BtnFlex>
-            <Button variant="dark" onClick={onSetListView}>
-              목록
-            </Button>
-            <Button variant="primary" onClick={onSetListView}>
-              등록
-            </Button>
-          </BtnFlex>
+          <RegisterOrgForm onSetListView={onSetListView} />
         </div>
+        {/* 활동 기관 수정 폼 */}
         {modView && (
           <div className="item">
             <header>
               활동 기관 수정 <span onClick={() => setModView(false)}>X</span>
             </header>
             <RegisterOrgForm modDataId={modDataId} />
-            <Button variant="primary">수정</Button>
           </div>
         )}
       </SubGrid>
+      {/* 활동 기관 목록 폼 */}
       {listView && (
         <div className="item list">
           <header>

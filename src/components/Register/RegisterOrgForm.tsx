@@ -1,8 +1,9 @@
-import { OrgProps } from "lib/zustand/registerStore";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import DaumPostcodeEmbed from "react-daum-postcode";
 import { Button, Modal } from "react-bootstrap";
+import { OrganizationStore, OrgProps } from "lib/zustand/organization";
+import { getOrganization } from "lib/api/volunteerApi";
 
 declare global {
   interface Window {
@@ -11,21 +12,44 @@ declare global {
 }
 
 const Container = styled.div`
-  > div > label {
+  overflow: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  > div > div > label {
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
     margin-right: 5px;
+  }
+  margin-top: 10px;
+
+  .org {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 `;
 
-const RegisterOrgForm = ({ modDataId }: any) => {
+const Label = styled.label`
+  width: 80px;
+`;
+
+const BtnFlex = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const RegisterOrgForm = ({ modDataId, onSetListView }: any) => {
   const { kakao } = window;
+  const { postOrganization } = OrganizationStore();
   const [modalIsOpen, setModalsOpen] = useState(false);
   const [orgData, setOrgData] = useState<OrgProps>({
     id: undefined,
     name: undefined,
     manager: undefined,
-    organPhoneNumber: undefined,
+    contact: undefined,
     address: {
       detailAddress: undefined,
       zipcode: undefined,
@@ -36,8 +60,50 @@ const RegisterOrgForm = ({ modDataId }: any) => {
     },
   });
 
-  const { name, manager, organPhoneNumber, address } = orgData;
-  console.log(orgData);
+  useEffect(() => {
+    if (modDataId) {
+      console.log(modDataId);
+      (async () => {
+        const res = await getOrganization(modDataId);
+        if (res?.data?.statusCode === 200) {
+          console.log(res.data.result);
+          let tmp = res.data.result;
+          setOrgData(tmp);
+        }
+      })();
+    }
+  }, [modDataId]);
+
+  useEffect(() => {
+    if (orgData.address?.detailAddress) {
+      getLALOInfo(orgData.address?.detailAddress);
+    }
+  }, [orgData.address?.detailAddress]);
+
+  const onClickPostOrg = async () => {
+    if (orgData.id && window.confirm("수정하시겠습니까?")) {
+      await postOrganization(orgData);
+    }
+
+    if (!orgData.id) {
+      let res = await postOrganization(orgData);
+      if (res)
+        setOrgData({
+          id: undefined,
+          name: undefined,
+          manager: undefined,
+          contact: undefined,
+          address: {
+            detailAddress: undefined,
+            zipcode: undefined,
+            coordinate: {
+              longitude: undefined,
+              latitude: undefined,
+            },
+          },
+        });
+    }
+  };
 
   // 주소에 따라 위도, 경도 저장
   const getLALOInfo = async (addr: any) => {
@@ -85,50 +151,44 @@ const RegisterOrgForm = ({ modDataId }: any) => {
     handleClose();
   };
 
-  // useEffect(() => {
-  //   if (modDataId) {
-  //     console.log(modDataId);
-  //     // api
-  //   }
-  // }, [modDataId]);
-
-  useEffect(() => {
-    if (orgData.address?.detailAddress) {
-      getLALOInfo(orgData.address?.detailAddress);
-    }
-  }, [orgData.address?.detailAddress]);
-
   return (
     <Container>
-      <div>
-        <label>기관명</label>
-        <input value={name || ""} name="name" onChange={onChangeOrgData} />
-      </div>
-      <div>
-        <label>기관 주소</label>
-        <input
-          disabled
-          name="address"
-          onChange={onChangeOrgData}
-          value={address?.detailAddress || ""}
-        />
-        <Button onClick={handleShow}>주소 찾기</Button>
-      </div>
-      <div>
-        <label>담당자</label>
-        <input
-          value={manager || ""}
-          name="manager"
-          onChange={onChangeOrgData}
-        />
-      </div>
-      <div>
-        <label>기관 번호</label>
-        <input
-          value={organPhoneNumber || ""}
-          name="organPhoneNumber"
-          onChange={onChangeOrgData}
-        />
+      <div className="org">
+        <div>
+          <Label>기관명</Label>
+          <input
+            value={orgData?.name || ""}
+            name="name"
+            onChange={onChangeOrgData}
+          />
+        </div>
+        <div>
+          <Label>기관 주소</Label>
+          <input
+            style={{ marginRight: "10px" }}
+            disabled
+            name="address"
+            onChange={onChangeOrgData}
+            value={orgData?.address?.detailAddress || ""}
+          />
+          <Button onClick={handleShow}>주소 찾기</Button>
+        </div>
+        <div>
+          <Label>담당자</Label>
+          <input
+            value={orgData?.manager || ""}
+            name="manager"
+            onChange={onChangeOrgData}
+          />
+        </div>
+        <div>
+          <Label>기관 번호</Label>
+          <input
+            value={orgData?.contact || ""}
+            name="contact"
+            onChange={onChangeOrgData}
+          />
+        </div>
       </div>
       <Modal size="lg" centered show={modalIsOpen} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -138,6 +198,16 @@ const RegisterOrgForm = ({ modDataId }: any) => {
           <DaumPostcodeEmbed onComplete={handleComplete} />
         </Modal.Body>
       </Modal>
+      <BtnFlex>
+        {!modDataId && (
+          <Button variant="dark" onClick={onSetListView}>
+            목록
+          </Button>
+        )}
+        <Button variant="primary" onClick={onClickPostOrg}>
+          {modDataId ? "수정" : "등록"}
+        </Button>
+      </BtnFlex>
     </Container>
   );
 };

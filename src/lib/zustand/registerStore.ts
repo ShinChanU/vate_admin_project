@@ -1,30 +1,13 @@
+import { getOrganization } from "lib/api/volunteerApi";
 import create from "zustand";
-import * as VolAPI from "lib/api/volunteerApi";
-
-type CoordinateProps = {
-  longitude?: number;
-  latitude?: number;
-};
-
-type AddressProps = {
-  detailAddress?: string;
-  zipcode?: string;
-  coordinate?: CoordinateProps;
-};
-
-export type OrgProps = {
-  id?: number;
-  name?: string;
-  manager?: string;
-  organPhoneNumber?: string;
-  address?: AddressProps;
-};
+import { OrganizationStore } from "./organization";
 
 type TimeProps = {
   startTime: number | null;
   endTime: number | null;
   numOfRecruit: number | null;
   activityWeek: string;
+  [key: string]: any;
 };
 
 type ActProps = {
@@ -34,7 +17,8 @@ type ActProps = {
 export interface RegisterStoreProps {
   activity: null | ActProps;
   timeList: null | TimeProps[];
-  organizations: OrgProps[];
+  selectOrg: any;
+  dataEngKor: any;
   onChangeTimeList: (index: number, flag: string, value: any) => void;
   onAddActTime: (day: string) => void;
   onRemoveActTime: (idx: number) => void;
@@ -43,13 +27,27 @@ export interface RegisterStoreProps {
   onChangeDate: (key: string, flag: string, date: Date) => void;
   stringToDate: (key: string, name: string) => Date;
   dateToString: (date: Date) => string;
-  getOrganizations: () => void;
+  postActivity: () => any[];
 }
 
 export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
   activity: null,
   timeList: null,
-  organizations: [],
+  selectOrg: null,
+
+  dataEngKor: {
+    category: "봉사 분야",
+    activityMethod: "활동 방법",
+    authorizationType: "승인 구분",
+    activityName: "봉사 활동명",
+    activitySummary: "주요 활동",
+    activityContent: "봉사 상세설명",
+    activityBegin: "활동 기간 시작일",
+    activityEnd: "활동 기간 종료일",
+    recruitBegin: "모집 기간 시작일",
+    recruitEnd: "모집 기간 종료일",
+    organizationId: "활동 기관",
+  },
 
   onChangeTimeList: (index, flag, value) => {
     console.log(index, flag, value);
@@ -115,7 +113,7 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
     });
   },
 
-  onChange: (name, value) => {
+  onChange: async (name, value) => {
     console.log(name, value);
     if (name.includes("Begin")) {
       let keyword = name.replace("Begin", "End");
@@ -130,6 +128,14 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
       } else if (endDate === null) {
         get().onChange(keyword, value);
       }
+    }
+
+    if (name === "organizationId" && !!value) {
+      let res = await getOrganization(value);
+      if (res?.data.statusCode === 200) {
+        set({ selectOrg: res?.data.result });
+      }
+      value = +value;
     }
 
     set({
@@ -172,10 +178,41 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
     get().onChange(resultKey, stringDate);
   },
 
-  getOrganizations: async () => {
-    const res = await VolAPI.getMemberOrg();
-    if (res?.data.statusCode === 200) {
-      set({ organizations: res.data.result });
+  postActivity: () => {
+    let error = [];
+    let tmpTimeList = [];
+    let timeList = get().timeList;
+    let activity = get().activity;
+
+    if (get().activity) {
+      for (let key in activity) {
+        if (activity?.[key] === null || activity?.[key] === "") {
+          error.push(get().dataEngKor[key]);
+        }
+      }
+    }
+    console.log(error);
+    if (timeList !== null) {
+      for (let time of timeList) {
+        let passFlag = true;
+        for (let key in time) {
+          if (key === "startTime" && time[key] === null) {
+            time[key] = 0;
+          } else if (time[key] === null || time[key] === "") {
+            passFlag = false;
+          }
+        }
+        if (passFlag) tmpTimeList.push(time);
+      }
+    }
+    if (!tmpTimeList.length) {
+      error.push("활동 요일");
+    }
+
+    if (error.length) {
+      return [false, error];
+    } else {
+      return [true, ""];
     }
   },
 }));

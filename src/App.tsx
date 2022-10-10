@@ -10,7 +10,7 @@ import { Container } from "react-bootstrap";
 
 const Layout = styled.div`
   min-height: 100vh;
-  max-width: 100vw;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

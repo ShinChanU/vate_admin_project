@@ -6,7 +6,7 @@ import styled from "styled-components";
 const NavbarDiv = styled.div`
   position: absolute;
   top: 0;
-  width: 100vw;
+  width: 100%;
 `;
 
 export const Navbar = () => {

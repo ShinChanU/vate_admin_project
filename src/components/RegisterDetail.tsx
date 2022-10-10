@@ -1,3 +1,4 @@
+import { OrganizationStore } from "lib/zustand/organization";
 import { RegisterStore } from "lib/zustand/registerStore";
 import React, { useEffect } from "react";
 import styled from "styled-components";
@@ -25,14 +26,16 @@ const Title = styled.div`
   }
 `;
 
-const RegisterDetail = ({ setPage }: any) => {
-  const { activity, onChange, getOrganizations, organizations } =
-    RegisterStore();
+const RegisterDetail = ({ setPage, activity }: any) => {
+  const { onChange } = RegisterStore();
+  const { getOrganizations, organizations } = OrganizationStore();
 
   useEffect(() => {
     getOrganizations();
     console.log(registerData, activity, organizations);
   }, []);
+
+  // activity data value와 동기화
 
   return (
     <div>
@@ -66,11 +69,13 @@ const RegisterDetail = ({ setPage }: any) => {
                 type="text"
                 name={id}
                 onChange={(e) => onChange(e.target.name, e.target.value)}
+                value={activity[id] || ""}
               />
             )}
             {type === "textarea" && (
               <textarea
                 name={id}
+                value={activity[id] || ""}
                 onChange={(e) => onChange(e.target.name, e.target.value)}
               />
             )}
