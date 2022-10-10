@@ -1,6 +1,7 @@
 import { RegisterStore } from "lib/zustand/registerStore";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import OrganizationsAdminForm from "./Register/OrganizationsAdminForm";
 import RegisterDetail from "./RegisterDetail";
 
 const FlexBox = styled.div`
@@ -26,16 +27,21 @@ const FlexBox = styled.div`
 
 const RegisterForm = () => {
   const { initRegisterForm } = RegisterStore();
+  const [page, setPage] = useState("form");
 
   useEffect(() => {
     initRegisterForm();
-    console.log("first");
   }, [initRegisterForm]);
 
   return (
     <FlexBox>
-      <button>등록</button>
-      <RegisterDetail />
+      {page === "form" && (
+        <>
+          <button>등록</button>
+          <RegisterDetail setPage={setPage} />
+        </>
+      )}
+      {page === "org" && <OrganizationsAdminForm setPage={setPage} />}
     </FlexBox>
   );
 };

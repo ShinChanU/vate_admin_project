@@ -1,20 +1,24 @@
 import { RegisterStore } from "lib/zustand/registerStore";
 import React from "react";
 import { Button } from "react-bootstrap";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { FormProps } from "./Radio";
 import TimeInput from "./TimeInput";
 
-const FlexBox = styled.div`
+const FlexStyle = css`
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
+`;
+
+const FlexBox = styled.div`
+  ${FlexStyle};
+  flex-wrap: wrap;
   justify-content: space-around;
 
   button {
-    padding: 0px;
-    width: 22px;
-    line-height: 20px;
+    padding: 5px;
+    /* width: 22px; */
+    line-height: 15px;
   }
 
   @media screen and (max-width: 1023px) {
@@ -26,6 +30,10 @@ const RadioElement = styled.span`
   margin-right: 10px;
   display: flex;
   align-items: center;
+`;
+
+const SubFlex = styled.div`
+  ${FlexStyle}
 `;
 
 const dayKor: any = {
@@ -48,12 +56,12 @@ const DynamicBox = ({ contents }: FormProps) => {
         {contents?.map((e) => (
           <RadioElement key={e.id}>
             {e.kor}
-            <Button onClick={() => onAddActTime(e.eng)}>&#43;</Button>
+            <Button onClick={() => onAddActTime(e.eng)}>추가</Button>
           </RadioElement>
         ))}
       </FlexBox>
       {timeList?.map((e: any, i) => (
-        <FlexBox key={i}>
+        <FlexBox style={{ marginBottom: "5px" }} key={i}>
           <div>
             <b>{dayKor[e.activityWeek]}</b>
           </div>
@@ -63,7 +71,7 @@ const DynamicBox = ({ contents }: FormProps) => {
             시~종료 시간
             <TimeInput time={e.endTime} index={i} flag="end" />시
           </div>
-          <div>
+          <SubFlex>
             모집 인원(명){" "}
             <input
               style={{ width: "70px" }}
@@ -73,8 +81,11 @@ const DynamicBox = ({ contents }: FormProps) => {
               name="numOfRecruit"
               onChange={(e) => onChangeTimeList(i, "num", e.target.value)}
             />
-            &nbsp;&nbsp;<Button onClick={() => onRemoveActTime(i)}>-</Button>
-          </div>
+            &nbsp;&nbsp;
+            <Button variant="danger" onClick={() => onRemoveActTime(i)}>
+              삭제
+            </Button>
+          </SubFlex>
         </FlexBox>
       ))}
     </>

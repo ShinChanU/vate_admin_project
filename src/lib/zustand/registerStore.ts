@@ -1,4 +1,24 @@
 import create from "zustand";
+import * as VolAPI from "lib/api/volunteerApi";
+
+type CoordinateProps = {
+  longitude?: number;
+  latitude?: number;
+};
+
+type AddressProps = {
+  detailAddress?: string;
+  zipcode?: string;
+  coordinate?: CoordinateProps;
+};
+
+export type OrgProps = {
+  id?: number;
+  name?: string;
+  manager?: string;
+  organPhoneNumber?: string;
+  address?: AddressProps;
+};
 
 type TimeProps = {
   startTime: number | null;
@@ -11,9 +31,10 @@ type ActProps = {
   [key: string]: null | string | number | TimeProps[];
 };
 
-interface RegisterStoreProps {
+export interface RegisterStoreProps {
   activity: null | ActProps;
   timeList: null | TimeProps[];
+  organizations: OrgProps[];
   onChangeTimeList: (index: number, flag: string, value: any) => void;
   onAddActTime: (day: string) => void;
   onRemoveActTime: (idx: number) => void;
@@ -22,12 +43,13 @@ interface RegisterStoreProps {
   onChangeDate: (key: string, flag: string, date: Date) => void;
   stringToDate: (key: string, name: string) => Date;
   dateToString: (date: Date) => string;
+  getOrganizations: () => void;
 }
 
 export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
   activity: null,
-
   timeList: null,
+  organizations: [],
 
   onChangeTimeList: (index, flag, value) => {
     console.log(index, flag, value);
@@ -148,5 +170,12 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
     else if (key === "act" && flag === "start") resultKey = "activityBegin";
     else resultKey = "activityEnd";
     get().onChange(resultKey, stringDate);
+  },
+
+  getOrganizations: async () => {
+    const res = await VolAPI.getMemberOrg();
+    if (res?.data.statusCode === 200) {
+      set({ organizations: res.data.result });
+    }
   },
 }));

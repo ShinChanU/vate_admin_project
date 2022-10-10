@@ -1,5 +1,5 @@
 import { RegisterStore } from "lib/zustand/registerStore";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import registerData from "../lib/json/volRegisterFormData.json";
 import DateForm from "./Register/DateForm";
@@ -25,10 +25,15 @@ const Title = styled.div`
   }
 `;
 
-const RegisterDetail = () => {
-  const { activity, onChange } = RegisterStore();
+const RegisterDetail = ({ setPage }: any) => {
+  const { activity, onChange, getOrganizations, organizations } =
+    RegisterStore();
 
-  console.log(registerData, activity);
+  useEffect(() => {
+    getOrganizations();
+    console.log(registerData, activity, organizations);
+  }, []);
+
   return (
     <div>
       {registerData.map((data) => {
@@ -49,7 +54,12 @@ const RegisterDetail = () => {
                 contents={data.contents}
               />
             )}
-            {type === "organization" && <OrganizationForm />}
+            {type === "organization" && (
+              <OrganizationForm
+                organizations={organizations}
+                setPage={setPage}
+              />
+            )}
             {type === "date" && <DateForm name={id.slice(0, 3)} />}
             {type === "text" && (
               <input
