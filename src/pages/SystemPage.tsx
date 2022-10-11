@@ -59,7 +59,7 @@ const SystemPage = () => {
             <Tab key={e.id} eventKey={e.des} title={e.title}></Tab>
           ))}
         </Ul>
-        <VolSystem status={nowStatus} />
+        <VolSystem status={nowStatus} setNowStatus={setNowStatus} />
       </Section>
     </Container>
   );

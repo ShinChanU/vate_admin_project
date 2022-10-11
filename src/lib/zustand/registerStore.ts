@@ -1,6 +1,5 @@
-import { getOrganization } from "lib/api/volunteerApi";
+import { getOrganization, postActivityApi } from "lib/api/volunteerApi";
 import create from "zustand";
-import { OrganizationStore } from "./organization";
 
 type TimeProps = {
   startTime: number | null;
@@ -10,15 +9,19 @@ type TimeProps = {
   [key: string]: any;
 };
 
-type ActProps = {
-  [key: string]: null | string | number | TimeProps[];
+export type ActProps = {
+  [key: string]: null | string | number | TimeProps[] | any;
+};
+
+type DataEngKorProps = {
+  [key: string]: string;
 };
 
 export interface RegisterStoreProps {
   activity: null | ActProps;
   timeList: null | TimeProps[];
   selectOrg: any;
-  dataEngKor: any;
+  dataEngKor: DataEngKorProps;
   onChangeTimeList: (index: number, flag: string, value: any) => void;
   onAddActTime: (day: string) => void;
   onRemoveActTime: (idx: number) => void;
@@ -27,7 +30,7 @@ export interface RegisterStoreProps {
   onChangeDate: (key: string, flag: string, date: Date) => void;
   stringToDate: (key: string, name: string) => Date;
   dateToString: (date: Date) => string;
-  postActivity: () => any[];
+  postActivity: () => Promise<any[]>;
 }
 
 export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
@@ -50,7 +53,6 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
   },
 
   onChangeTimeList: (index, flag, value) => {
-    console.log(index, flag, value);
     let tmpTimeList = get().timeList;
     // time 데이터 수정
     if (flag === "end" && tmpTimeList && tmpTimeList[index]) {
@@ -110,11 +112,12 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
         recruitEnd: null,
         organizationId: null,
       },
+      timeList: null,
+      selectOrg: null,
     });
   },
 
   onChange: async (name, value) => {
-    console.log(name, value);
     if (name.includes("Begin")) {
       let keyword = name.replace("Begin", "End");
       let endDate = get().activity?.[keyword];
@@ -178,7 +181,7 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
     get().onChange(resultKey, stringDate);
   },
 
-  postActivity: () => {
+  postActivity: async () => {
     let error = [];
     let tmpTimeList = [];
     let timeList = get().timeList;
@@ -191,7 +194,7 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
         }
       }
     }
-    console.log(error);
+
     if (timeList !== null) {
       for (let time of timeList) {
         let passFlag = true;
@@ -212,7 +215,17 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
     if (error.length) {
       return [false, error];
     } else {
-      return [true, ""];
+      if (activity) {
+        activity.timeList = tmpTimeList;
+        let res = await postActivityApi(activity);
+        if (res?.data.statusCode === 200) {
+          return [true, 1];
+        } else {
+          return [true, 0];
+        }
+      } else {
+        return [true, 0];
+      }
     }
   },
 }));

@@ -18,6 +18,7 @@ const Layout = styled.div`
 
 const StyleContainer = styled(Container)`
   height: 100vh;
+  margin-bottom: 30px;
 `;
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           ></Route>
           <Route path="/auth/*" element={<AuthPage />}></Route>
         </Routes>
+        <div>&nbsp;</div>
       </StyleContainer>
     </Layout>
   );

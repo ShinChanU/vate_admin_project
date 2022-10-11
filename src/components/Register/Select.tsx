@@ -1,5 +1,4 @@
 import React from "react";
-import { isNull } from "util";
 import { FormProps } from "./Radio";
 
 const Select = ({ contents, onChange, id }: FormProps) => {

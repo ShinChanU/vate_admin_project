@@ -1,4 +1,5 @@
-import React from "react";
+import { OrganizationStore } from "lib/zustand/organization";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import RegisterForm from "./RegisterForm";
 import StatusForm from "./StatusForm";
@@ -16,11 +17,22 @@ const Container = styled.div`
   /* outline: 1px solid black; */
 `;
 
-const VolSystem = ({ status }: VolStatusProps) => {
+const VolSystem = ({ status, setNowStatus }: VolStatusProps | any) => {
+  const { getOrganizations, organizations } = OrganizationStore();
+
+  useEffect(() => {
+    getOrganizations();
+  }, [status]);
+
   return (
     <Container>
-      {status === "volStatus" && <StatusForm />}
-      {status === "volRegister" && <RegisterForm />}
+      {status === "volStatus" && <StatusForm organizations={organizations} />}
+      {status === "volRegister" && (
+        <RegisterForm
+          setNowStatus={setNowStatus}
+          organizations={organizations}
+        />
+      )}
     </Container>
   );
 };

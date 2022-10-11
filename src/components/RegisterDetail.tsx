@@ -26,16 +26,8 @@ const Title = styled.div`
   }
 `;
 
-const RegisterDetail = ({ setPage, activity }: any) => {
+const RegisterDetail = ({ setPage, organizations, activity }: any) => {
   const { onChange } = RegisterStore();
-  const { getOrganizations, organizations } = OrganizationStore();
-
-  useEffect(() => {
-    getOrganizations();
-    console.log(registerData, activity, organizations);
-  }, []);
-
-  // activity data value와 동기화
 
   return (
     <div>
@@ -69,13 +61,13 @@ const RegisterDetail = ({ setPage, activity }: any) => {
                 type="text"
                 name={id}
                 onChange={(e) => onChange(e.target.name, e.target.value)}
-                value={activity[id] || ""}
+                value={activity?.[id] || ""}
               />
             )}
             {type === "textarea" && (
               <textarea
                 name={id}
-                value={activity[id] || ""}
+                value={activity?.[id] || ""}
                 onChange={(e) => onChange(e.target.name, e.target.value)}
               />
             )}

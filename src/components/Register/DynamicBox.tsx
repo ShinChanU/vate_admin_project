@@ -36,7 +36,7 @@ const SubFlex = styled.div`
   ${FlexStyle}
 `;
 
-const dayKor: any = {
+export const dayKor: any = {
   MONDAY: "월요일",
   TUESDAY: "화요일",
   WEDNESDAY: "수요일",

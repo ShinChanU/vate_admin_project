@@ -31,21 +31,27 @@ const FlexBox = styled.div`
   }
 `;
 
-const RegisterForm = () => {
+const RegisterForm = ({ setNowStatus, organizations }: any) => {
   const { initRegisterForm, postActivity, activity } = RegisterStore();
   const [page, setPage] = useState("form");
-
-  console.log(activity);
 
   // useEffect(() => {
   //   initRegisterForm();
   // }, [initRegisterForm]);
 
-  const onClick = () => {
-    let res = postActivity();
+  const onClick = async () => {
+    let res = await postActivity();
     if (res[0]) {
-      // post 성공
-      // initRegisterForm();
+      if (res[1]) {
+        // post 성공
+        alert("등록에 성공하였습니다 !");
+        initRegisterForm();
+        setNowStatus("volStatus");
+      } else {
+        // post 실패
+        alert("등록에 실패하였습니다. 다시 시도 해주세요.");
+        initRegisterForm();
+      }
     } else {
       // post 실패
       console.log(res[1]);
@@ -53,7 +59,6 @@ const RegisterForm = () => {
       str = str.join(", ");
       alert(`항목들을 모두 입력해주세요. \n\n ***입력 누락 항목 : ${str}`);
     }
-    console.log(res);
   };
 
   return (
@@ -66,7 +71,11 @@ const RegisterForm = () => {
             </Button>
             <Button onClick={onClick}>등록</Button>
           </header>
-          <RegisterDetail setPage={setPage} activity={activity} />
+          <RegisterDetail
+            setPage={setPage}
+            activity={activity}
+            organizations={organizations}
+          />
         </>
       )}
       {page === "org" && <OrganizationsAdminForm setPage={setPage} />}

@@ -1,7 +1,4 @@
-import { getOrganization } from "lib/api/volunteerApi";
-import { OrganizationStore, OrgProps } from "lib/zustand/organization";
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
 import styled, { css } from "styled-components";
 import OrgList from "./OrgList";
 import RegisterOrgForm from "./RegisterOrgForm";
