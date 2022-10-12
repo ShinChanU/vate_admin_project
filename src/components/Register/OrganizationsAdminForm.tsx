@@ -38,7 +38,8 @@ const Container = styled.div<Props>`
 
   .list {
     > div {
-      height: 500px;
+      /* flex: 1; */
+      height: 600px;
       overflow: auto;
       @media screen and (max-width: 1023px) {
         height: auto;
@@ -57,7 +58,6 @@ const Container = styled.div<Props>`
     transition: all 0.5s linear;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 
     > header {
       display: flex;
@@ -80,11 +80,6 @@ const SubGrid = styled.div`
   > div {
     height: 50%;
   }
-`;
-
-const BtnFlex = styled.div`
-  display: flex;
-  justify-content: space-between;
 `;
 
 const OrganizationsAdminForm = ({ setPage }: any) => {

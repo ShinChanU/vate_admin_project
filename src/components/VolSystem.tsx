@@ -14,7 +14,6 @@ const Container = styled.div`
   border: rgba(50, 50, 93, 0.25) 1px solid;
   border-top: none;
   padding: 20px;
-  /* outline: 1px solid black; */
 `;
 
 const VolSystem = ({ status, setNowStatus }: VolStatusProps | any) => {
@@ -22,6 +21,7 @@ const VolSystem = ({ status, setNowStatus }: VolStatusProps | any) => {
 
   useEffect(() => {
     getOrganizations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   return (

@@ -3,21 +3,25 @@ import create from "zustand";
 import { ActProps } from "./registerStore";
 
 export interface ActivityStoreProps {
-  activities: null | ActProps[];
+  activities: ActProps[];
   getActivities: (orgId: number) => Promise<any>;
 }
 
 export const ActivityStore = create<ActivityStoreProps>((set, get) => ({
-  activities: null,
+  activities: [],
 
   getActivities: async (orgId) => {
     const res = await VolAPI.getActivityApi(orgId);
     if (res?.data.statusCode === 200) {
-      set({ activities: res?.data.result });
+      let tmp = [];
+      for (let data of res?.data.result) {
+        if (!data.isDeleted) tmp.push(data);
+      }
+      set({ activities: tmp });
     }
   },
 
   initActivities: () => {
-    set({ activities: null });
+    set({ activities: [] });
   },
 }));

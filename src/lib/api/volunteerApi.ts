@@ -109,7 +109,16 @@ export const updateApplicantAuth = async (id: number, isAuthorized: string) => {
     const res = await axios.put(`/members/application/${id}/authorization`, {
       isAuthorized,
     });
-    console.log(res);
+    return res;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
+export const updateActivity = async (id: any, data: any) => {
+  try {
+    const res = await axios.put(`/vol/activities/${id}`, data);
     return res;
   } catch (e) {
     console.log(e);
@@ -127,8 +136,14 @@ export const deleteOrganization = async (id: any) => {
   }
 };
 
-// post 함수
-// zutand 생성
-// com에서 호출
+export const deleteActivity = async (id: any) => {
+  try {
+    const res = await axios.delete(`/vol/activities/${id}`);
+    return res;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
 
 // https://www.wanted.co.kr/wd/127594

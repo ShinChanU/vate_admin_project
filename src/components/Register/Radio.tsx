@@ -1,3 +1,4 @@
+import { TimeProps } from "lib/zustand/registerStore";
 import React from "react";
 import styled from "styled-components";
 
@@ -8,9 +9,12 @@ type ContentsProps = {
 };
 
 export type FormProps = {
-  contents: ContentsProps[] | undefined;
-  onChange: (name: string, value: any) => void;
+  contents?: ContentsProps[] | undefined;
+  onChange: (name?: any, value?: any, status?: any) => void;
+  value?: string;
   id: string;
+  timeList?: TimeProps[];
+  flag: string;
 };
 
 const RadioElement = styled.span`
@@ -18,17 +22,23 @@ const RadioElement = styled.span`
   /* font-weight: 500; */
 `;
 
-const Radio = ({ contents, onChange, id }: FormProps) => {
+const Radio = ({ contents, onChange, id, value, flag }: FormProps) => {
   return (
     <div>
       {contents?.map((e) => {
         return (
           <RadioElement key={e.id}>
             <input
+              disabled={flag ? false : true}
+              checked={value === e.eng}
               type="radio"
               value={e.eng}
               name={id}
-              onChange={(e) => onChange(e.target.name, e.target.value)}
+              onChange={
+                flag !== "mod"
+                  ? (e) => onChange(e.target.name, e.target.value, flag)
+                  : (e) => onChange(e)
+              }
             />
             {e.kor}
           </RadioElement>

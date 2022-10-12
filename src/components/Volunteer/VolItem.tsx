@@ -34,8 +34,13 @@ const Buttons = styled.div`
   }
 `;
 
-const VolItem = ({ item, setDetailPageData }: any) => {
-  const { id, organization, activitySummary, activityDayOfweeks } = item;
+const VolItem = ({
+  data,
+  setActivityData,
+  onClickDeleteActivity,
+  setIsActModify,
+}: any) => {
+  const { id, organization, activitySummary, organizationId } = data;
 
   return (
     <Item>
@@ -51,9 +56,22 @@ const VolItem = ({ item, setDetailPageData }: any) => {
         </div>
       </Contents>
       <Buttons>
-        <Button onClick={() => setDetailPageData(item)}>상세 및 승인</Button>
-        <Button variant="secondary">봉사 수정</Button>
-        <Button variant="danger">봉사 삭제</Button>
+        <Button onClick={() => setActivityData(data)}>상세 및 승인</Button>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            setActivityData(data);
+            setIsActModify(true);
+          }}
+        >
+          봉사 수정
+        </Button>
+        <Button
+          variant="danger"
+          onClick={() => onClickDeleteActivity(id, organizationId)}
+        >
+          봉사 삭제
+        </Button>
       </Buttons>
     </Item>
   );

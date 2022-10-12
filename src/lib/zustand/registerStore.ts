@@ -1,7 +1,7 @@
 import { getOrganization, postActivityApi } from "lib/api/volunteerApi";
 import create from "zustand";
 
-type TimeProps = {
+export type TimeProps = {
   startTime: number | null;
   endTime: number | null;
   numOfRecruit: number | null;
@@ -18,25 +18,45 @@ type DataEngKorProps = {
 };
 
 export interface RegisterStoreProps {
-  activity: null | ActProps;
-  timeList: null | TimeProps[];
+  newActivity: null | ActProps;
+  newTimeList: null | TimeProps[];
   selectOrg: any;
   dataEngKor: DataEngKorProps;
-  onChangeTimeList: (index: number, flag: string, value: any) => void;
   onAddActTime: (day: string) => void;
   onRemoveActTime: (idx: number) => void;
   initRegisterForm: () => void;
   onChange: (name: string, value: any) => void;
   onChangeDate: (key: string, flag: string, date: Date) => void;
-  stringToDate: (key: string, name: string) => Date;
+  onChangeTimeList: (index: any, flag: any, value: any) => void;
+  stringToDate: (key: string, name: string, status: string) => Date;
   dateToString: (date: Date) => string;
   postActivity: () => Promise<any[]>;
 }
 
 export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
-  activity: null,
-  timeList: null,
+  newActivity: null,
+  newTimeList: null,
   selectOrg: null,
+
+  initRegisterForm: () => {
+    set({
+      newActivity: {
+        activityName: null,
+        activitySummary: null,
+        activityContent: null,
+        activityMethod: null, // "" 일수도
+        authorizationType: null, // "" 일수도
+        category: null,
+        activityBegin: null,
+        activityEnd: null,
+        recruitBegin: null,
+        recruitEnd: null,
+        organizationId: null,
+      },
+      newTimeList: null,
+      selectOrg: null,
+    });
+  },
 
   dataEngKor: {
     category: "봉사 분야",
@@ -53,7 +73,9 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
   },
 
   onChangeTimeList: (index, flag, value) => {
-    let tmpTimeList = get().timeList;
+    let tmpTimeList;
+    tmpTimeList = get().newTimeList;
+
     // time 데이터 수정
     if (flag === "end" && tmpTimeList && tmpTimeList[index]) {
       tmpTimeList[index].endTime = value;
@@ -70,57 +92,44 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
     if (flag === "num" && tmpTimeList && tmpTimeList[index]) {
       tmpTimeList[index].numOfRecruit = +value;
     }
+
     set({
-      timeList: tmpTimeList,
+      newTimeList: tmpTimeList,
     });
   },
 
   onAddActTime: (day) => {
-    let tmpArr = get().timeList;
+    let tmpArr: TimeProps[] | null;
+    tmpArr = get().newTimeList;
+
     if (tmpArr === null) tmpArr = [];
     tmpArr.push({
-      startTime: null,
-      endTime: null,
+      startTime: 9,
+      endTime: 9,
       numOfRecruit: null,
       activityWeek: day,
     });
+
     set({
-      timeList: tmpArr,
+      newTimeList: tmpArr,
     });
   },
 
   onRemoveActTime: (idx) => {
-    let tmpArr = get().timeList;
-    tmpArr?.splice(idx, 1);
-    set({
-      timeList: tmpArr,
-    });
-  },
+    let tmpArr;
+    tmpArr = get().newTimeList;
 
-  initRegisterForm: () => {
+    tmpArr?.splice(idx, 1);
+
     set({
-      activity: {
-        activityName: null,
-        activitySummary: null,
-        activityContent: null,
-        activityMethod: null, // "" 일수도
-        authorizationType: null, // "" 일수도
-        category: null,
-        activityBegin: null,
-        activityEnd: null,
-        recruitBegin: null,
-        recruitEnd: null,
-        organizationId: null,
-      },
-      timeList: null,
-      selectOrg: null,
+      newTimeList: tmpArr,
     });
   },
 
   onChange: async (name, value) => {
     if (name.includes("Begin")) {
       let keyword = name.replace("Begin", "End");
-      let endDate = get().activity?.[keyword];
+      let endDate = get().newActivity?.[keyword];
       if (typeof endDate === "string") {
         if (
           Number(value.split("-").join("")) >
@@ -142,20 +151,22 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
     }
 
     set({
-      activity: {
-        ...get().activity,
+      newActivity: {
+        ...get().newActivity,
         [name]: value,
       },
     });
   },
 
-  stringToDate: (key: string, name: string) => {
+  stringToDate: (key: string, name: string, status: string) => {
     let str;
-    if (key === "start" && name === "act") str = get().activity?.activityBegin;
-    else if (key === "end" && name === "act") str = get().activity?.activityEnd;
-    else if (key === "start" && name === "rec")
-      str = get().activity?.recruitBegin;
-    else if (key === "end" && name === "rec") str = get().activity?.recruitEnd;
+    let act = get().newActivity;
+
+    if (key === "start" && name === "act") str = act?.activityBegin;
+    else if (key === "end" && name === "act") str = act?.activityEnd;
+    else if (key === "start" && name === "rec") str = act?.recruitBegin;
+    else if (key === "end" && name === "rec") str = act?.recruitEnd;
+
     if (!str) return new Date();
     var yyyyMMdd = String(str);
     var sYear = yyyyMMdd.substring(0, 4);
@@ -184,10 +195,10 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
   postActivity: async () => {
     let error = [];
     let tmpTimeList = [];
-    let timeList = get().timeList;
-    let activity = get().activity;
+    let timeList = get().newTimeList;
+    let activity = get().newActivity;
 
-    if (get().activity) {
+    if (activity) {
       for (let key in activity) {
         if (activity?.[key] === null || activity?.[key] === "") {
           error.push(get().dataEngKor[key]);

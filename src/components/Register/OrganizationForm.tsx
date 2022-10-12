@@ -1,5 +1,5 @@
 import { OrgProps } from "lib/zustand/organization";
-import React, { useState } from "react";
+import React from "react";
 import { RegisterStore } from "lib/zustand/registerStore";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";

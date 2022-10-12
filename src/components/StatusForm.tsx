@@ -1,9 +1,12 @@
+import React, { useEffect, useState } from "react";
 import { ActivityStore } from "lib/zustand/activityStore";
 import { OrgProps } from "lib/zustand/organization";
-import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import VolItem from "components/Volunteer/VolItem";
 import VolDetail from "./Volunteer/VolDetail";
+import { deleteActivity, updateActivity } from "lib/api/volunteerApi";
+import VolDetailInfo from "./Volunteer/VolDetailInfo";
+import { Button } from "react-bootstrap";
 
 const VolList = styled.div`
   margin-top: 10px;
@@ -24,21 +27,106 @@ const VolItems = styled.div`
   overflow: auto;
 `;
 
+const Header = styled.header`
+  display: flex;
+  margin: 0px 30px;
+`;
+
+const Footer = styled.footer`
+  display: flex;
+  margin: 0px 30px;
+  justify-content: end;
+`;
+
 const StatusForm = ({ organizations }: any) => {
-  const [detailPageData, setDetailPageData] = useState(null);
+  const [activityData, setActivityData] = useState(null);
+  const [isActModify, setIsActModify] = useState(false);
   const { activities, getActivities } = ActivityStore();
+  // const { modActivity, modTimeList, initModData } = RegisterStore();
+  const [modActData, setModActData] = useState({});
+  const [ids, setIds] = useState({
+    orgId: -1,
+    actId: -1,
+  });
 
   useEffect(() => {
-    // initActivities();
-  }, []);
+    if (activityData) {
+      const {
+        activityName,
+        activitySummary,
+        activityContent,
+        activityMethod,
+        authorizationType,
+        category,
+        id,
+      } = activityData;
+      setModActData({
+        activityName,
+        activitySummary,
+        activityContent,
+        activityMethod,
+        authorizationType,
+        category,
+      });
+      setIds({
+        ...ids,
+        actId: id,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activityData]);
+
+  const checkObjIsEmpty = (obj: any) => {
+    for (let key in obj) if (!obj[key].trim()) return false;
+    return true;
+  };
 
   const onChangeOrgId = (orgId: number) => {
+    setIds({
+      ...ids,
+      orgId: orgId,
+    });
     getActivities(orgId);
+  };
+
+  const onClickDeleteActivity = async (actId: any, orgId: any) => {
+    if (window.confirm("해당 봉사를 정말 삭제하시겠습니까?")) {
+      let res = await deleteActivity(actId);
+      if (res?.data.statusCode === 200) {
+        alert("삭제되었습니다.");
+        setActivityData(null);
+        getActivities(orgId);
+      }
+    }
+  };
+
+  const onClickUpdateActivity = async () => {
+    if (window.confirm("수정하시겠습니까?")) {
+      if (checkObjIsEmpty(modActData)) {
+        let res = await updateActivity(ids.actId, modActData);
+        if (res?.data.statusCode === 200) {
+          alert("수정되었습니다.");
+          setIsActModify(false);
+          setActivityData(null);
+          getActivities(ids.orgId);
+        }
+      } else {
+        alert("공백이 있습니다. 수정되지 않았습니다.");
+      }
+    }
+  };
+
+  const onChangeModAct = (e: any) => {
+    const { name, value } = e.target;
+    setModActData({
+      ...modActData,
+      [name]: value,
+    });
   };
 
   return (
     <>
-      {!detailPageData && (
+      {!activityData && !isActModify && (
         <div>
           <select onChange={(e) => onChangeOrgId(+e.target.value)}>
             <option value="">선택해주세요.</option>
@@ -53,23 +141,60 @@ const StatusForm = ({ organizations }: any) => {
             ))}
           </select>
           <VolList>
-            <header>봉사 내용</header>
+            <header style={{ fontWeight: "550" }}>봉사 내용</header>
             {!!activities?.length && (
               <VolItems>
                 {activities.map((item) => (
                   <VolItem
                     key={item.id}
-                    item={item}
-                    setDetailPageData={setDetailPageData}
+                    data={item}
+                    setActivityData={setActivityData}
+                    onClickDeleteActivity={onClickDeleteActivity}
+                    setIsActModify={setIsActModify}
                   />
                 ))}
               </VolItems>
             )}
-            {!activities?.length && <div>등록된 봉사가 없는 기관입니다</div>}
+            {!activities?.length && (
+              <div style={{ textAlign: "center" }}>
+                등록된 봉사가 없는 기관입니다
+              </div>
+            )}
           </VolList>
         </div>
       )}
-      {!!detailPageData && <VolDetail volData={detailPageData} />}
+      {!!activityData && !isActModify && (
+        <VolDetail
+          data={activityData}
+          setActivityData={setActivityData}
+          onClickDeleteActivity={onClickDeleteActivity}
+          setIsActModify={setIsActModify}
+        />
+      )}
+      {!!activityData && isActModify && (
+        <>
+          <Header>
+            <Button
+              onClick={() => {
+                setIsActModify(false);
+                setActivityData(null);
+              }}
+              variant="secondary"
+            >
+              목록으로
+            </Button>
+          </Header>
+          <VolDetailInfo
+            data={activityData}
+            modActData={modActData}
+            flag="mod"
+            onChange={onChangeModAct}
+          />
+          <Footer>
+            <Button onClick={onClickUpdateActivity}>수정 완료</Button>
+          </Footer>
+        </>
+      )}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
@@ -20,9 +20,10 @@ const StyleDatePicker = styled(DatePicker)`
 
 type DateFormProps = {
   name: string;
+  flag: string;
 };
 
-const DateForm = ({ name }: DateFormProps) => {
+const DateForm = ({ name, flag }: DateFormProps) => {
   const { stringToDate, onChangeDate } = RegisterStore();
 
   return (
@@ -32,11 +33,11 @@ const DateForm = ({ name }: DateFormProps) => {
         <StyleDatePicker
           dateFormat="yyyy년 MM월 dd일"
           locale={ko}
-          selected={stringToDate("start", name)}
+          selected={stringToDate("start", name, flag)}
           onChange={(date: Date) => onChangeDate(name, "start", date)}
           selectsStart
-          startDate={stringToDate("start", name)}
-          endDate={stringToDate("end", name)}
+          startDate={stringToDate("start", name, flag)}
+          endDate={stringToDate("end", name, flag)}
         />
       </div>
       <div>
@@ -44,12 +45,12 @@ const DateForm = ({ name }: DateFormProps) => {
         <StyleDatePicker
           dateFormat="yyyy년 MM월 dd일"
           locale={ko}
-          selected={stringToDate("end", name)}
+          selected={stringToDate("end", name, flag)}
           onChange={(date: Date) => onChangeDate(name, "end", date)}
           selectsEnd
-          startDate={stringToDate("start", name)}
-          endDate={stringToDate("end", name)}
-          minDate={stringToDate("start", name)}
+          startDate={stringToDate("start", name, flag)}
+          endDate={stringToDate("end", name, flag)}
+          minDate={stringToDate("start", name, flag)}
         />
       </div>
     </FlexBox>

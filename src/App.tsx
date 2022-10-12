@@ -1,6 +1,5 @@
 import React from "react";
 import AuthPage from "pages/AuthPage";
-import Home from "pages/Home";
 import SystemPage from "pages/SystemPage";
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from "components/NavBar";

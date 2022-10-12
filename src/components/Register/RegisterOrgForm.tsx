@@ -62,11 +62,9 @@ const RegisterOrgForm = ({ modDataId, onSetListView }: any) => {
 
   useEffect(() => {
     if (modDataId) {
-      console.log(modDataId);
       (async () => {
         const res = await getOrganization(modDataId);
         if (res?.data?.statusCode === 200) {
-          console.log(res.data.result);
           let tmp = res.data.result;
           setOrgData(tmp);
         }
@@ -78,6 +76,7 @@ const RegisterOrgForm = ({ modDataId, onSetListView }: any) => {
     if (orgData.address?.detailAddress) {
       getLALOInfo(orgData.address?.detailAddress);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orgData.address?.detailAddress]);
 
   const onClickPostOrg = async () => {

@@ -3,6 +3,8 @@ import { dayKor } from "components/Register/DynamicBox";
 import styled from "styled-components";
 import { getOrganization } from "lib/api/volunteerApi";
 import { OrgProps } from "lib/zustand/organization";
+import Radio from "components/Register/Radio";
+import Select from "components/Register/Select";
 
 const Container = styled.div`
   margin: 30px;
@@ -30,7 +32,15 @@ const Label = styled.label`
   font-weight: 650;
 `;
 
-const VolDetailValue = ({ title, type, value }: any) => {
+const VolDetailValue = ({
+  title,
+  type,
+  value,
+  flag,
+  onChange,
+  name,
+  contents,
+}: any) => {
   const [orgData, setOrgData] = useState<OrgProps | null>(null);
 
   useEffect(() => {
@@ -47,25 +57,23 @@ const VolDetailValue = ({ title, type, value }: any) => {
   return (
     <Container>
       <Title>{title}</Title>
-      {type === "text" && <div>{value}</div>}
-      {type === "textarea" && (
-        <textarea disabled value={value} style={{ width: "100%" }}></textarea>
+      {type === "radio" && (
+        <Radio
+          contents={contents}
+          value={value}
+          onChange={onChange}
+          id={name}
+          flag={flag}
+        />
       )}
-      {type === "org" && orgData !== null && (
-        <>
-          <div>
-            <Label>기관 주소 </Label>
-            {orgData?.address?.detailAddress}
-          </div>
-          <div>
-            <Label>담당자</Label>
-            {orgData?.manager}
-          </div>
-          <div>
-            <Label>기관 번호</Label>
-            {orgData?.contact}
-          </div>
-        </>
+      {type === "select" && (
+        <Select
+          contents={contents}
+          value={value}
+          onChange={onChange}
+          id={name}
+          flag={flag}
+        />
       )}
       {type === "array" && (
         <div>
@@ -80,10 +88,48 @@ const VolDetailValue = ({ title, type, value }: any) => {
           ))}
         </div>
       )}
+      {type === "org" && orgData !== null && (
+        <>
+          <div>
+            <Label>기관 이름</Label>
+            {orgData.name}
+          </div>
+          <div>
+            <Label>기관 주소 </Label>
+            {orgData?.address?.detailAddress}
+          </div>
+          <div>
+            <Label>담당자</Label>
+            {orgData?.manager}
+          </div>
+          <div>
+            <Label>기관 번호</Label>
+            {orgData?.contact}
+          </div>
+        </>
+      )}
       {type === "date" && (
         <div>
           {value.begin} ~ {value.end}
         </div>
+      )}
+      {type === "text" && (
+        <input
+          disabled={flag ? false : true}
+          value={value}
+          style={{ width: "100%" }}
+          onChange={onChange}
+          name={name}
+        />
+      )}
+      {type === "textarea" && (
+        <textarea
+          disabled={flag ? false : true}
+          value={value}
+          style={{ width: "100%" }}
+          onChange={onChange}
+          name={name}
+        ></textarea>
       )}
     </Container>
   );

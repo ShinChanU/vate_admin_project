@@ -64,7 +64,6 @@ export const SessionStore = create<SessionStoreProps>((set, get) => ({
       return;
     }
     const res = await VolAPI.getSessionApplicants(id);
-    console.log(res);
     if (res?.data.statusCode === 200) {
       set({ applicants: res?.data.result });
     }
@@ -72,9 +71,7 @@ export const SessionStore = create<SessionStoreProps>((set, get) => ({
 
   getSessions: async (id) => {
     const res = await VolAPI.getSessions(id);
-    console.log(res);
     if (res?.data.statusCode === 200) {
-      // 더미 데이터로 테스트
       let tmpArr: string[] = [];
       res.data.result.forEach((e: any) => {
         if (!tmpArr.includes(e.activityDate)) {

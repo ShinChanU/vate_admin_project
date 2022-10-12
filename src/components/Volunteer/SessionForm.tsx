@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { SessionStore } from "lib/zustand/sessionStore";
-import { Button } from "react-bootstrap";
 import styled from "styled-components";
 import ApplicantAuthBtn from "./ApplicantAuthBtn";
 
@@ -71,11 +70,10 @@ const SessionForm = ({ actId }: any) => {
     sessionId,
   } = SessionStore();
 
-  console.log(applicants);
-
   useEffect(() => {
     getSessions(actId);
     onChangeSearchDate(actId, "default");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actId]);
 
   return (
@@ -131,7 +129,7 @@ const SessionForm = ({ actId }: any) => {
                 applicationId,
               } = e;
               return (
-                <tr>
+                <tr key={applicationId}>
                   <td>{name}</td>
                   <td>{birthday}</td>
                   <td style={{ width: "100px" }}>{idOf1365}</td>
@@ -156,7 +154,11 @@ const SessionForm = ({ actId }: any) => {
           </tbody>
         </Table>
       )}
-      {!applicants.length && <>조회된 신청자가 없습니다.</>}
+      {!applicants.length && (
+        <div style={{ margin: "20px", textAlign: "center" }}>
+          조회된 신청자가 없습니다.
+        </div>
+      )}
     </div>
   );
 };

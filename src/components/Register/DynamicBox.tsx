@@ -46,9 +46,8 @@ export const dayKor: any = {
   SUNDAY: "일요일",
 };
 
-const DynamicBox = ({ contents }: FormProps) => {
-  const { timeList, onAddActTime, onRemoveActTime, onChangeTimeList } =
-    RegisterStore();
+const DynamicBox = ({ contents, timeList, flag }: FormProps) => {
+  const { onAddActTime, onRemoveActTime, onChangeTimeList } = RegisterStore();
 
   return (
     <>
@@ -72,7 +71,7 @@ const DynamicBox = ({ contents }: FormProps) => {
             <TimeInput time={e.endTime} index={i} flag="end" />시
           </div>
           <SubFlex>
-            모집 인원(명){" "}
+            모집 인원(명)
             <input
               style={{ width: "70px" }}
               placeholder="모집할 인원을 입력해주세요."

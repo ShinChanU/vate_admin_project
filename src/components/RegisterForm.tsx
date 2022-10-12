@@ -1,5 +1,5 @@
 import { RegisterStore } from "lib/zustand/registerStore";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
 import OrganizationsAdminForm from "./Register/OrganizationsAdminForm";
@@ -32,12 +32,13 @@ const FlexBox = styled.div`
 `;
 
 const RegisterForm = ({ setNowStatus, organizations }: any) => {
-  const { initRegisterForm, postActivity, activity } = RegisterStore();
+  const { newTimeList, initRegisterForm, postActivity, newActivity } =
+    RegisterStore();
   const [page, setPage] = useState("form");
 
   // useEffect(() => {
   //   initRegisterForm();
-  // }, [initRegisterForm]);
+  // }, []);
 
   const onClick = async () => {
     let res = await postActivity();
@@ -54,7 +55,6 @@ const RegisterForm = ({ setNowStatus, organizations }: any) => {
       }
     } else {
       // post 실패
-      console.log(res[1]);
       let str = res[1];
       str = str.join(", ");
       alert(`항목들을 모두 입력해주세요. \n\n ***입력 누락 항목 : ${str}`);
@@ -73,8 +73,10 @@ const RegisterForm = ({ setNowStatus, organizations }: any) => {
           </header>
           <RegisterDetail
             setPage={setPage}
-            activity={activity}
             organizations={organizations}
+            activity={newActivity}
+            timeList={newTimeList}
+            flag="new"
           />
         </>
       )}

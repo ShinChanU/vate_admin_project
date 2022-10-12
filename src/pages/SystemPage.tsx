@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import VolSystem from "components/VolSystem";
@@ -48,7 +48,9 @@ const SystemPage = () => {
 
   return (
     <Container>
-      <div>VATE 등록 시스템</div>
+      <div style={{ textAlign: "center", fontSize: "20px", fontWeight: "550" }}>
+        VATE 등록 시스템
+      </div>
       <Section>
         <Ul
           id="controlled-tab-example"

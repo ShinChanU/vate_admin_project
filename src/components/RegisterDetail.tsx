@@ -1,6 +1,5 @@
-import { OrganizationStore } from "lib/zustand/organization";
-import { RegisterStore } from "lib/zustand/registerStore";
 import React, { useEffect } from "react";
+import { RegisterStore } from "lib/zustand/registerStore";
 import styled from "styled-components";
 import registerData from "../lib/json/volRegisterFormData.json";
 import DateForm from "./Register/DateForm";
@@ -26,8 +25,21 @@ const Title = styled.div`
   }
 `;
 
-const RegisterDetail = ({ setPage, organizations, activity }: any) => {
-  const { onChange } = RegisterStore();
+const RegisterDetail = ({
+  setPage,
+  organizations,
+  activity,
+  timeList,
+  flag,
+}: any) => {
+  const { initRegisterForm, onChange } = RegisterStore();
+
+  useEffect(() => {
+    if (!activity) {
+      initRegisterForm();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activity]);
 
   return (
     <div>
@@ -37,16 +49,30 @@ const RegisterDetail = ({ setPage, organizations, activity }: any) => {
           <StyleDiv key={id}>
             <Title>{title}</Title>
             {type === "radio" && (
-              <Radio contents={data.contents} onChange={onChange} id={id} />
+              <Radio
+                value={activity?.[id]}
+                contents={data.contents}
+                onChange={onChange}
+                flag={flag}
+                id={id}
+              />
             )}
             {type === "select" && (
-              <Select onChange={onChange} contents={data.contents} id={id} />
+              <Select
+                value={activity?.[id]}
+                onChange={onChange}
+                flag={flag}
+                contents={data.contents}
+                id={id}
+              />
             )}
             {type === "dynamicCheckbox" && (
               <DynamicBox
-                id={id}
                 onChange={onChange}
+                id={id}
                 contents={data.contents}
+                timeList={timeList}
+                flag={flag}
               />
             )}
             {type === "organization" && (
@@ -55,7 +81,7 @@ const RegisterDetail = ({ setPage, organizations, activity }: any) => {
                 setPage={setPage}
               />
             )}
-            {type === "date" && <DateForm name={id.slice(0, 3)} />}
+            {type === "date" && <DateForm name={id.slice(0, 3)} flag={flag} />}
             {type === "text" && (
               <input
                 type="text"

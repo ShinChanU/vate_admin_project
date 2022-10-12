@@ -1,5 +1,4 @@
 import React from "react";
-import { RegisterStore } from "lib/zustand/registerStore";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
 import { OrganizationStore } from "lib/zustand/organization";
@@ -14,6 +13,7 @@ const BtnFlex = styled.div`
 const Container = styled.div`
   display: flex;
   width: 100%;
+
   > div {
     width: 100%;
     > div {
@@ -37,8 +37,6 @@ const FlexDiv = styled.div`
 const OrgList = ({ setModView, setModDataId }: any) => {
   const { organizations, getOrganizations } = OrganizationStore();
 
-  console.log(organizations);
-
   const onClickModBtn = (id: any) => {
     setModView(true);
     setModDataId(id);
@@ -47,11 +45,11 @@ const OrgList = ({ setModView, setModDataId }: any) => {
   const onClickDelBtn = async (id: any) => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       let res = await deleteOrganization(id);
-      if (res?.data.statusCode === 200) {
+      if (res?.data?.statusCode === 200) {
         alert("삭제되었습니다.");
         setModView(false);
         getOrganizations();
-      }
+      } else alert("봉사 활동이 있는 기관은 삭제가 불가능합니다.");
     }
   };
 
@@ -97,9 +95,9 @@ const OrgList = ({ setModView, setModDataId }: any) => {
           ))}
         </div>
       )}
-      {/* {organizations.length !== 0 && (
+      {organizations.length === 0 && (
         <div>조회되는 활동 기관이 없습니다. 추가해주세요</div>
-      )} */}
+      )}
     </Container>
   );
 };

@@ -1,5 +1,5 @@
-import { RegisterStore } from "lib/zustand/registerStore";
 import React, { useEffect, useState } from "react";
+import { RegisterStore } from "lib/zustand/registerStore";
 
 type TimeInputProps = {
   time: number | null;
@@ -8,24 +8,23 @@ type TimeInputProps = {
 };
 
 const TimeInput = ({ time, index, flag }: TimeInputProps) => {
-  const { timeList, onChangeTimeList } = RegisterStore();
+  const { newTimeList, onChangeTimeList } = RegisterStore();
   const [timeArr, setTimeArr] = useState([
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-    21, 22, 23,
+    9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
   ]);
 
   useEffect(() => {
-    if (flag === "end" && timeList) {
-      let tmpStartT = timeList[index].startTime;
+    if (flag === "end" && newTimeList) {
+      let tmpStartT = newTimeList[index].startTime;
       if (tmpStartT !== null) {
         let tmpArr = [
-          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-          20, 21, 22, 23,
+          9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
         ].filter((e) => e >= (tmpStartT || 0));
         setTimeArr(tmpArr);
       }
     }
-  }, [timeList?.[index].startTime]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newTimeList?.[index].startTime]);
 
   return (
     <select
