@@ -44,12 +44,12 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
         activityName: null,
         activitySummary: null,
         activityContent: null,
-        activityMethod: null, // "" 일수도
-        authorizationType: null, // "" 일수도
+        activityMethod: null,
+        authorizationType: null,
         category: null,
-        activityBegin: null,
+        activityBegin: get().dateToString(new Date()),
         activityEnd: null,
-        recruitBegin: null,
+        recruitBegin: get().dateToString(new Date()),
         recruitEnd: null,
         organizationId: null,
       },
