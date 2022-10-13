@@ -40,6 +40,7 @@ export interface SessionStoreProps {
   getSessions: (id: number) => void;
 }
 
+// 신청자 세션 관리 스토어
 export const SessionStore = create<SessionStoreProps>((set, get) => ({
   sessionsDates: [],
   sessionsTimes: [],

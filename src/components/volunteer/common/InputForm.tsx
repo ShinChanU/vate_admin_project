@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import { RegisterStore } from "lib/zustand/registerStore";
+import { RegisterStore } from "lib/zustand/volunteerStore";
 import styled from "styled-components";
-import registerData from "../lib/json/volRegisterFormData.json";
-import DateForm from "./Register/DateForm";
-import DynamicBox from "./Register/DynamicBox";
-import OrganizationForm from "./Register/OrganizationForm";
-import Radio from "./Register/Radio";
-import Select from "./Register/Select";
+import registerData from "../../../lib/json/volRegisterFormData.json";
+import DateForm from "./DateForm";
+import DynamicBox from "./DynamicBox";
+import Radio from "./Radio";
+import OrganizationForm from "./OrganizationForm";
+import Select from "./Select";
 
 const StyleDiv = styled.div`
   margin: 30px 30px;
@@ -25,7 +25,7 @@ const Title = styled.div`
   }
 `;
 
-const RegisterDetail = ({
+const InputForm = ({
   setPage,
   organizations,
   activity,
@@ -104,4 +104,4 @@ const RegisterDetail = ({
   );
 };
 
-export default RegisterDetail;
+export default InputForm;

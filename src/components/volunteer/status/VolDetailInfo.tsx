@@ -1,5 +1,5 @@
 import React from "react";
-import registerData from "../../lib/json/volRegisterFormData.json";
+import registerData from "../../../lib/json/volRegisterFormData.json";
 import VolDetailValue from "./VolDetailValue";
 
 const VolDetailInfo = ({ data, flag, onChange, modActData }: any) => {

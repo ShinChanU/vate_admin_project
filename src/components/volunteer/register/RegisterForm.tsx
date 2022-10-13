@@ -1,9 +1,9 @@
-import { RegisterStore } from "lib/zustand/registerStore";
+import { RegisterStore } from "lib/zustand/volunteerStore";
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
-import OrganizationsAdminForm from "./Register/OrganizationsAdminForm";
-import RegisterDetail from "./RegisterDetail";
+import InputForm from "../common/InputForm";
+import OrganizationsAdminForm from "./OrganizationsAdminForm";
 
 const FlexBox = styled.div`
   display: flex;
@@ -36,10 +36,6 @@ const RegisterForm = ({ setNowStatus, organizations }: any) => {
     RegisterStore();
   const [page, setPage] = useState("form");
 
-  // useEffect(() => {
-  //   initRegisterForm();
-  // }, []);
-
   const onClick = async () => {
     let res = await postActivity();
     if (res[0]) {
@@ -71,7 +67,7 @@ const RegisterForm = ({ setNowStatus, organizations }: any) => {
             </Button>
             <Button onClick={onClick}>등록</Button>
           </header>
-          <RegisterDetail
+          <InputForm
             setPage={setPage}
             organizations={organizations}
             activity={newActivity}

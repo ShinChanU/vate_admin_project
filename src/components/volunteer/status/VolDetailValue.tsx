@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { dayKor } from "components/Register/DynamicBox";
+import { dayKor } from "components/volunteer/common/DynamicBox";
 import styled from "styled-components";
 import { getOrganization } from "lib/api/volunteerApi";
-import { OrgProps } from "lib/zustand/organization";
-import Radio from "components/Register/Radio";
-import Select from "components/Register/Select";
+import { OrgProps } from "lib/zustand/organizationStore";
+import Radio from "components/volunteer/common/Radio";
+import Select from "../common/Select";
 
 const Container = styled.div`
   margin: 30px;

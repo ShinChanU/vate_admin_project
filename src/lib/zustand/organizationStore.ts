@@ -30,6 +30,7 @@ interface OrganizationStoreProps {
   getOrganizations: () => void;
 }
 
+// 봉사 기관 관리 스토어
 export const OrganizationStore = create<OrganizationStoreProps>((set, get) => ({
   organizations: [],
 

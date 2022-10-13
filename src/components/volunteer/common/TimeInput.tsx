@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RegisterStore } from "lib/zustand/registerStore";
+import { RegisterStore } from "lib/zustand/volunteerStore";
 
 type TimeInputProps = {
   time: number | null;

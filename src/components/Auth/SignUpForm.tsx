@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { AuthStore } from "lib/zustand/auth";
+import { AuthStore } from "lib/zustand/authStore";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, Header } from "./LoginForm";
 

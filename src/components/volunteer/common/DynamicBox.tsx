@@ -1,9 +1,9 @@
-import { RegisterStore } from "lib/zustand/registerStore";
 import React from "react";
-import { Button } from "react-bootstrap";
 import styled, { css } from "styled-components";
+import { Button } from "react-bootstrap";
 import { FormProps } from "./Radio";
 import TimeInput from "./TimeInput";
+import { RegisterStore } from "lib/zustand/volunteerStore";
 
 const FlexStyle = css`
   display: flex;

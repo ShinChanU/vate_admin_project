@@ -50,6 +50,7 @@ export const refresh = async () => {
   return response;
 };
 
+// 로그아웃
 export const logout = async () => {
   try {
     const res = await axios.post("/center/logout");

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ActivityStore } from "lib/zustand/activityStore";
-import { OrgProps } from "lib/zustand/organization";
 import styled from "styled-components";
-import VolItem from "components/Volunteer/VolItem";
-import VolDetail from "./Volunteer/VolDetail";
+import VolItem from "components/volunteer/status/VolItem";
+import VolDetail from "./VolDetail";
+import ModifyVolForm from "./ModifyVolForm";
 import { deleteActivity, updateActivity } from "lib/api/volunteerApi";
-import VolDetailInfo from "./Volunteer/VolDetailInfo";
-import { Button } from "react-bootstrap";
+import { OrgProps } from "lib/zustand/organizationStore";
+import { RegisterStore } from "lib/zustand/volunteerStore";
 
 const VolList = styled.div`
   margin-top: 10px;
@@ -27,22 +26,10 @@ const VolItems = styled.div`
   overflow: auto;
 `;
 
-const Header = styled.header`
-  display: flex;
-  margin: 0px 30px;
-`;
-
-const Footer = styled.footer`
-  display: flex;
-  margin: 0px 30px;
-  justify-content: end;
-`;
-
 const StatusForm = ({ organizations }: any) => {
   const [activityData, setActivityData] = useState(null);
   const [isActModify, setIsActModify] = useState(false);
-  const { activities, getActivities } = ActivityStore();
-  // const { modActivity, modTimeList, initModData } = RegisterStore();
+  const { activities, getActivities } = RegisterStore();
   const [modActData, setModActData] = useState({});
   const [ids, setIds] = useState({
     orgId: -1,
@@ -126,6 +113,7 @@ const StatusForm = ({ organizations }: any) => {
 
   return (
     <>
+      {/* 봉사 기관 선택 및 기관별 활동 조회 폼 */}
       {!activityData && !isActModify && (
         <div>
           <select onChange={(e) => onChangeOrgId(+e.target.value)}>
@@ -163,6 +151,7 @@ const StatusForm = ({ organizations }: any) => {
           </VolList>
         </div>
       )}
+      {/* 봉사 활동 상세 조회 및 승인 관리 폼 */}
       {!!activityData && !isActModify && (
         <VolDetail
           data={activityData}
@@ -171,29 +160,16 @@ const StatusForm = ({ organizations }: any) => {
           setIsActModify={setIsActModify}
         />
       )}
+      {/* 봉사 활동 수정 폼 */}
       {!!activityData && isActModify && (
-        <>
-          <Header>
-            <Button
-              onClick={() => {
-                setIsActModify(false);
-                setActivityData(null);
-              }}
-              variant="secondary"
-            >
-              목록으로
-            </Button>
-          </Header>
-          <VolDetailInfo
-            data={activityData}
-            modActData={modActData}
-            flag="mod"
-            onChange={onChangeModAct}
-          />
-          <Footer>
-            <Button onClick={onClickUpdateActivity}>수정 완료</Button>
-          </Footer>
-        </>
+        <ModifyVolForm
+          setIsActModify={setIsActModify}
+          setActivityData={setActivityData}
+          modActData={modActData}
+          activityData={activityData}
+          onChangeModAct={onChangeModAct}
+          onClickUpdateActivity={onClickUpdateActivity}
+        />
       )}
     </>
   );

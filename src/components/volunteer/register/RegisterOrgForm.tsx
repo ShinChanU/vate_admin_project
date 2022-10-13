@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import DaumPostcodeEmbed from "react-daum-postcode";
 import { Button, Modal } from "react-bootstrap";
-import { OrganizationStore, OrgProps } from "lib/zustand/organization";
+import { OrganizationStore, OrgProps } from "lib/zustand/organizationStore";
 import { getOrganization } from "lib/api/volunteerApi";
 
 declare global {

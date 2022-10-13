@@ -1,9 +1,9 @@
-import LoginForm from "components/Auth/LoginForm";
+import LoginForm from "components/auth/LoginForm";
 import React, { useEffect } from "react";
-import SignUpForm from "components/Auth/SignUpForm";
+import SignUpForm from "components/auth/SignUpForm";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { AuthStore } from "lib/zustand/auth";
+import { AuthStore } from "lib/zustand/authStore";
 
 const StyleContainer = styled.div`
   padding: 50px 70px;

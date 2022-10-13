@@ -4,9 +4,8 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-// import { userCheck } from "lib/api/authApi";
 import "./lib/interceptors/axios";
-import { AuthStore } from "lib/zustand/auth";
+import { AuthStore } from "lib/zustand/authStore";
 
 axios.defaults.withCredentials = true;
 

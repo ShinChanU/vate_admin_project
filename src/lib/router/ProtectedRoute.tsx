@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { refresh } from "lib/api/authApi";
 import { useNavigate } from "react-router-dom";
-import { AuthStore } from "lib/zustand/auth";
+import { AuthStore } from "lib/zustand/authStore";
 
 const ProtectedRoute = ({ children }: any) => {
   const [loading, setLoading] = useState(false);
@@ -25,9 +25,7 @@ const ProtectedRoute = ({ children }: any) => {
         setLoading(true);
         if (res.status === 200) return;
         else alertToLogin("로그인 후 사용가능합니다 !");
-      } else {
-        alertToLogin("서버의 문제가 발생했습니다 !");
-      }
+      } else alertToLogin("서버의 문제가 발생했습니다 !");
     })();
   }, [alertToLogin, user]);
 

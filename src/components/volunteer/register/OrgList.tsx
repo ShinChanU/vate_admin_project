@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
-import { OrganizationStore } from "lib/zustand/organization";
+import { OrganizationStore } from "lib/zustand/organizationStore";
 import { deleteOrganization } from "lib/api/volunteerApi";
 
 const BtnFlex = styled.div`

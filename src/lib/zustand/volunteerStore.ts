@@ -1,5 +1,10 @@
-import { getOrganization, postActivityApi } from "lib/api/volunteerApi";
+import * as VolAPI from "lib/api/volunteerApi";
 import create from "zustand";
+
+export interface ActivityStoreProps {
+  activities: ActProps[];
+  getActivities: (orgId: number) => Promise<any>;
+}
 
 export type TimeProps = {
   startTime: number | null;
@@ -18,6 +23,7 @@ type DataEngKorProps = {
 };
 
 export interface RegisterStoreProps {
+  activities: ActProps[];
   newActivity: null | ActProps;
   newTimeList: null | TimeProps[];
   selectOrg: any;
@@ -30,13 +36,16 @@ export interface RegisterStoreProps {
   onChangeTimeList: (index: any, flag: any, value: any) => void;
   stringToDate: (key: string, name: string, status: string) => Date;
   dateToString: (date: Date) => string;
+  getActivities: (orgId: number) => Promise<any>;
   postActivity: () => Promise<any[]>;
 }
 
+// 봉사 활동 관리 스토어
 export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
-  newActivity: null,
-  newTimeList: null,
-  selectOrg: null,
+  newActivity: null, // 등록할 봉사 활동
+  newTimeList: null, // 등록할 봉사 활동 시간
+  selectOrg: null, // 봉사 기관
+  activities: [], // 조회되는 봉사 활동
 
   initRegisterForm: () => {
     set({
@@ -56,6 +65,10 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
       newTimeList: null,
       selectOrg: null,
     });
+  },
+
+  initActivities: () => {
+    set({ activities: [] });
   },
 
   dataEngKor: {
@@ -143,7 +156,7 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
     }
 
     if (name === "organizationId" && !!value) {
-      let res = await getOrganization(value);
+      let res = await VolAPI.getOrganization(value);
       if (res?.data.statusCode === 200) {
         set({ selectOrg: res?.data.result });
       }
@@ -192,6 +205,17 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
     get().onChange(resultKey, stringDate);
   },
 
+  getActivities: async (orgId) => {
+    const res = await VolAPI.getActivityApi(orgId);
+    if (res?.data.statusCode === 200) {
+      let tmp = [];
+      for (let data of res?.data.result) {
+        if (!data.isDeleted) tmp.push(data);
+      }
+      set({ activities: tmp });
+    }
+  },
+
   postActivity: async () => {
     let error = [];
     let tmpTimeList = [];
@@ -228,7 +252,7 @@ export const RegisterStore = create<RegisterStoreProps>((set, get) => ({
     } else {
       if (activity) {
         activity.timeList = tmpTimeList;
-        let res = await postActivityApi(activity);
+        let res = await VolAPI.postActivityApi(activity);
         if (res?.data.statusCode === 200) {
           return [true, 1];
         } else {

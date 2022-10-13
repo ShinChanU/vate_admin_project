@@ -1,4 +1,4 @@
-import { AuthStore } from "lib/zustand/auth";
+import { AuthStore } from "lib/zustand/authStore";
 import { Button, Container, Nav, Navbar as NavbarBs } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";

@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
 import { ko } from "date-fns/esm/locale";
-import { RegisterStore } from "lib/zustand/registerStore";
+import { RegisterStore } from "lib/zustand/volunteerStore";
 
 const FlexBox = styled.div`
   display: flex;

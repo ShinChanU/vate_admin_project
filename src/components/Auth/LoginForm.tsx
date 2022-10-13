@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { AuthStore } from "lib/zustand/auth";
+import { AuthStore } from "lib/zustand/authStore";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -35,8 +35,8 @@ export const Header = styled.h4`
 `;
 
 const LoginForm = () => {
-  const { initInfo, login, onChange, postLogin, errorMessage } = AuthStore();
   const navigate = useNavigate();
+  const { initInfo, login, onChange, postLogin, errorMessage } = AuthStore();
   const { username, password } = login;
 
   useEffect(() => {

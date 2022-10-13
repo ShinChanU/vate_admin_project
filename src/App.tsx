@@ -2,7 +2,7 @@ import React from "react";
 import AuthPage from "pages/AuthPage";
 import SystemPage from "pages/SystemPage";
 import { Routes, Route } from "react-router-dom";
-import { Navbar } from "components/NavBar";
+import { Navbar } from "components/common/NavBar";
 import styled from "styled-components";
 import ProtectedRoute from "lib/router/ProtectedRoute";
 import { Container } from "react-bootstrap";

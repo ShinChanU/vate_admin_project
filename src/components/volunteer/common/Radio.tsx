@@ -1,4 +1,4 @@
-import { TimeProps } from "lib/zustand/registerStore";
+import { TimeProps } from "lib/zustand/volunteerStore";
 import React from "react";
 import styled from "styled-components";
 

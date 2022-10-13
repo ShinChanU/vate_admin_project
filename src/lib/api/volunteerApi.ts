@@ -1,7 +1,8 @@
 import axios from "axios";
-import { OrgProps } from "lib/zustand/organization";
-import { ActProps } from "lib/zustand/registerStore";
+import { OrgProps } from "lib/zustand/organizationStore";
+import { ActProps } from "lib/zustand/volunteerStore";
 
+// 봉사 기관 전체 조회
 export const getMemberOrg = async () => {
   try {
     const res = await axios.get("/members/organizations");
@@ -12,6 +13,7 @@ export const getMemberOrg = async () => {
   }
 };
 
+// 봉사 기관 세부 조회
 export const getOrganization = async (id: number | any) => {
   try {
     const res = await axios.get(`/vol/organizations/${id}`);
@@ -22,6 +24,7 @@ export const getOrganization = async (id: number | any) => {
   }
 };
 
+// 봉사 기관별 봉사활동 조회
 export const getActivityApi = async (id: number) => {
   try {
     const res = await axios.get(`/vol/organizations/${id}/activities`);
@@ -32,6 +35,7 @@ export const getActivityApi = async (id: number) => {
   }
 };
 
+// 봉사 활동 세션 전체 조회
 export const getSessions = async (id: number) => {
   try {
     const res = await axios.get(`/vol/activities/${id}/sessions`);
@@ -42,6 +46,7 @@ export const getSessions = async (id: number) => {
   }
 };
 
+// 날짜에 따른 봉사 활동 세션 조회
 export const getSessionDate = async (id: number, date: string) => {
   try {
     const res = await axios.get(`/vol/activities/${id}/sessions?date=${date}`);
@@ -52,6 +57,7 @@ export const getSessionDate = async (id: number, date: string) => {
   }
 };
 
+// 봉사 신청자 정보 조회
 export const getSessionApplicants = async (id: number) => {
   try {
     const res = await axios.get(`/vol/sessions/${id}/applicants`);
@@ -62,6 +68,7 @@ export const getSessionApplicants = async (id: number) => {
   }
 };
 
+// 봉사 활동 등록
 export const postActivityApi = async (data: ActProps) => {
   try {
     const res = await axios.post("/vol/activities", data);
@@ -72,6 +79,7 @@ export const postActivityApi = async (data: ActProps) => {
   }
 };
 
+// 봉사 기관 등록
 export const postOrganization = async (data: OrgProps) => {
   const { name, manager, contact, address } = data;
   try {
@@ -88,6 +96,7 @@ export const postOrganization = async (data: OrgProps) => {
   }
 };
 
+// 봉사 기관 수정
 export const updateOrganization = async (data: OrgProps) => {
   const { id, name, manager, contact, address } = data;
   try {
@@ -104,6 +113,7 @@ export const updateOrganization = async (data: OrgProps) => {
   }
 };
 
+// 신청자 상태 수정
 export const updateApplicantAuth = async (id: number, isAuthorized: string) => {
   try {
     const res = await axios.put(`/members/application/${id}/authorization`, {
@@ -116,6 +126,7 @@ export const updateApplicantAuth = async (id: number, isAuthorized: string) => {
   }
 };
 
+// 봉사 활동 수정
 export const updateActivity = async (id: any, data: any) => {
   try {
     const res = await axios.put(`/vol/activities/${id}`, data);
@@ -126,6 +137,7 @@ export const updateActivity = async (id: any, data: any) => {
   }
 };
 
+// 기관 삭제
 export const deleteOrganization = async (id: any) => {
   try {
     const res = await axios.delete(`/vol/organizations/${id}`);
@@ -136,6 +148,7 @@ export const deleteOrganization = async (id: any) => {
   }
 };
 
+// 활동 삭제
 export const deleteActivity = async (id: any) => {
   try {
     const res = await axios.delete(`/vol/activities/${id}`);
@@ -145,5 +158,3 @@ export const deleteActivity = async (id: any) => {
     return null;
   }
 };
-
-// https://www.wanted.co.kr/wd/127594

@@ -1,8 +1,8 @@
-import { OrganizationStore } from "lib/zustand/organization";
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import RegisterForm from "./RegisterForm";
-import StatusForm from "./StatusForm";
+import StatusForm from "./status/StatusForm";
+import RegisterForm from "./register/RegisterForm";
+import { OrganizationStore } from "lib/zustand/organizationStore";
 
 type VolStatusProps = {
   status: string | null;
@@ -16,7 +16,7 @@ const Container = styled.div`
   padding: 20px;
 `;
 
-const VolSystem = ({ status, setNowStatus }: VolStatusProps | any) => {
+const AdminForm = ({ status, setNowStatus }: VolStatusProps | any) => {
   const { getOrganizations, organizations } = OrganizationStore();
 
   useEffect(() => {
@@ -37,4 +37,4 @@ const VolSystem = ({ status, setNowStatus }: VolStatusProps | any) => {
   );
 };
 
-export default VolSystem;
+export default AdminForm;

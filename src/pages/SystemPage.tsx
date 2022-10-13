@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
-import VolSystem from "components/VolSystem";
+import AdminForm from "components/volunteer/AdminForm";
 
 export interface StyledComProps {
   clickState?: boolean;
@@ -61,7 +61,7 @@ const SystemPage = () => {
             <Tab key={e.id} eventKey={e.des} title={e.title}></Tab>
           ))}
         </Ul>
-        <VolSystem status={nowStatus} setNowStatus={setNowStatus} />
+        <AdminForm status={nowStatus} setNowStatus={setNowStatus} />
       </Section>
     </Container>
   );

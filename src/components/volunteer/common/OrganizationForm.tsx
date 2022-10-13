@@ -1,6 +1,6 @@
-import { OrgProps } from "lib/zustand/organization";
+import { OrgProps } from "lib/zustand/organizationStore";
 import React from "react";
-import { RegisterStore } from "lib/zustand/registerStore";
+import { RegisterStore } from "lib/zustand/volunteerStore";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 

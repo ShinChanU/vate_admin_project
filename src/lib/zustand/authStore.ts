@@ -24,6 +24,7 @@ interface AuthStoreProps {
   postLogout: () => void;
 }
 
+// 로그인, 회원가입 스토어
 export const AuthStore = create<AuthStoreProps>((set, get) => ({
   login: {},
   signUp: {},
