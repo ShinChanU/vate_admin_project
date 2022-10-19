@@ -60,6 +60,8 @@ export const OrganizationStore = create<OrganizationStoreProps>((set, get) => ({
   },
 
   postOrganization: async (data) => {
+    console.log(data);
+    console.log(get().verifyOrgForm(data));
     if (!get().verifyOrgForm(data)) {
       alert("항목을 모두 채워주세요 !");
       return false;

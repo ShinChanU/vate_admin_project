@@ -107,7 +107,7 @@ export const AuthStore = create<AuthStoreProps>((set, get) => ({
       return 0;
     }
     const res = await AuthAPI.signup(username, password);
-    if (res?.data.statusCode === 201) {
+    if (res?.data.statusCode === 200) {
       // 회원가입 성공
       return 1;
     } else if (res?.data.statusCode === 400) {
