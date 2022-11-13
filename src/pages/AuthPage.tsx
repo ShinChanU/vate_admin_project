@@ -1,6 +1,6 @@
-import LoginForm from "components/auth/LoginForm";
+import LoginForm from "components/Auth/LoginForm";
 import React, { useEffect } from "react";
-import SignUpForm from "components/auth/SignUpForm";
+import SignUpForm from "components/Auth/SignUpForm";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { AuthStore } from "lib/zustand/authStore";
